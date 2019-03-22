@@ -1,5 +1,8 @@
 package ro.pub.cs.systems.eim.lab05.boundedserviceactivity.view;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -45,4 +48,19 @@ public class BoundedServiceActivity extends AppCompatActivity {
 
     // TODO: exercise 10c - create a ServiceConnection object
     // override methods onServiceConnected() and onServiceDisconnected()
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            BoundedService.BoundedServiceBinder binder = (BoundedService.BoundedServiceBinder)service;
+            boundedService = binder.getService();
+            boundedServiceStatus = Constants.SERVICE_STATUS_BOUND;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            boundedService = null;
+            boundedServiceStatus = Constants.SERVICE_STATUS_UNBOUND;
+        }
+    };
+
 }
